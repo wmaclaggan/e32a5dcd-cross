@@ -68,32 +68,34 @@ h1{font:800 44px/1 var(--serif);margin:0;letter-spacing:-.01em}
 .mbar,.mfoot,.pop{display:none}
 @media (max-width:640px){
  html,body{height:100%}body{overflow:hidden;-webkit-text-size-adjust:100%}
- :root{--g:min(100vw,calc(100vh - 360px));--g:min(100vw,calc(100dvh - 356px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)))}
+ :root{--ins:calc(env(safe-area-inset-top,0px) + env(safe-area-inset-bottom,0px));--g:min(100vw,calc(100vh - 262px));--g:min(100vw,calc(100dvh - 262px - var(--ins)));
+  --kh:clamp(36px,calc((100vh - 100vw - 154px)/3),54px);--kh:clamp(36px,calc((100dvh - 100vw - 154px - var(--ins))/3),54px)}
  .top,.bar,.cluebar{display:none}
- .mbar{display:flex;align-items:center;gap:2px;height:56px;padding:0 max(8px,env(safe-area-inset-right,0px)) 0 max(14px,env(safe-area-inset-left,0px))}
+ .mbar{display:flex;align-items:center;gap:2px;height:52px;padding:0 max(8px,env(safe-area-inset-right,0px)) 0 max(14px,env(safe-area-inset-left,0px))}
  .mbar .time{font-size:22px;font-variant-numeric:tabular-nums;min-width:64px}
  .mbar .sp{flex:1}
  .ib{width:46px;height:46px;display:grid;place-items:center;color:var(--icon);touch-action:manipulation}
  .ib svg{width:28px;height:28px}
  .ib.pz{color:var(--muted)}.ib.pz svg{width:18px;height:18px}
- .main{display:block;padding:6px 0 0}
+ .main{display:block;padding:0}
  .left{width:100%;display:flex;justify-content:center}
- .grid{border-width:2px}
+ .grid{border-width:2px;border-left:0;border-right:0}
+ .c .v{font-size:calc(var(--g)/15*.68);padding-bottom:calc(var(--g)/15*.06)}.c .n{font-size:calc(var(--g)/15*.29);top:1px;left:2px}
  .clues{display:none}
- .clues.open{display:flex;flex-direction:column;gap:24px;position:fixed;inset:56px 0 0;height:auto;z-index:5;overflow-y:auto;background:var(--paper);padding:12px max(16px,env(safe-area-inset-right,0px)) 340px max(16px,env(safe-area-inset-left,0px))}
+ .clues.open{display:flex;flex-direction:column;gap:24px;position:fixed;inset:52px 0 0;height:auto;z-index:5;overflow-y:auto;background:var(--paper);padding:12px max(16px,env(safe-area-inset-right,0px)) 340px max(16px,env(safe-area-inset-left,0px))}
  .clues.open .col ol{overflow:visible}.col li{font-size:16px;padding:7px 8px;border-left-width:8px}
  .mfoot{display:block;position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--kbbg);padding-bottom:env(safe-area-inset-bottom,0px)}
- .mclue{display:flex;align-items:center;background:var(--cluebar);min-height:78px}
+ .mclue{display:flex;align-items:center;background:var(--cluebar);height:64px}
  .mclue .nav{width:48px;align-self:stretch;display:grid;place-items:center;color:var(--ink);touch-action:manipulation}
  .mclue .nav svg{width:14px;height:26px}
- .mclue .t{flex:1;min-width:0;font-size:18px;line-height:1.28;padding:8px 2px;text-align:left}
+ .mclue .t{flex:1;min-width:0;font-size:19px;line-height:1.22;padding:4px 2px;text-align:left;max-height:64px;overflow:hidden}
  .mkb{display:flex;flex-direction:column;gap:9px;padding:7px max(3px,env(safe-area-inset-right,0px)) 8px max(3px,env(safe-area-inset-left,0px))}
  .mkb .row{display:flex;gap:5px;justify-content:center}
- .mkb button{flex:1 1 0;max-width:44px;height:50px;border-radius:6px;background:var(--key);color:var(--ink);box-shadow:0 1px 0 var(--keysh);font-size:24px;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+ .mkb button{flex:1 1 0;max-width:44px;height:var(--kh);border-radius:6px;background:var(--key);color:var(--ink);box-shadow:0 1px 0 var(--keysh);font-size:24px;touch-action:manipulation;-webkit-user-select:none;user-select:none}
  .mkb button:active{background:var(--key2)}
  .mkb .wide{max-width:62px;flex:1.6 1 0;background:var(--key2);font-size:14px}
  .mkb .wide svg{width:30px;height:22px}
- .pop{position:fixed;top:54px;right:max(8px,env(safe-area-inset-right,0px));z-index:8;background:var(--paper);border:1px solid var(--rule);box-shadow:0 8px 28px rgba(0,0,0,.22);min-width:210px;padding:6px 0}
+ .pop{position:fixed;top:50px;right:max(8px,env(safe-area-inset-right,0px));z-index:8;background:var(--paper);border:1px solid var(--rule);box-shadow:0 8px 28px rgba(0,0,0,.22);min-width:210px;padding:6px 0}
  .pop.open{display:block}
  .pop h4{margin:10px 18px 4px;font-size:12px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
  .pop button{display:block;width:100%;text-align:left;padding:10px 18px;font-size:16px}
