@@ -151,7 +151,7 @@ function paint(){document.querySelectorAll('.c.word,.c.cur').forEach(t=>t.classL
  if(c){const li=document.getElementById(dir+c[0]);li.classList.add('on');scrollLi(li);
   document.getElementById('cbn').textContent=c[0]+dir;document.getElementById('cbt').innerHTML=fmt(c);document.getElementById('mct').innerHTML=fmt(c)}
  if(o){const li=document.getElementById(od+o[0]);li.classList.add('x');scrollLi(li)}
- D.across.concat(D.down).forEach((c,k)=>{const d=k<D.across.length?'A':'D';const L=wordOf(c[1],c[2],d);document.getElementById(d+c[0]).classList.toggle('done',L.every(([a,b])=>fill[a][b]))})}
+ D.across.concat(D.down).forEach((c,k)=>{const d=k<D.across.length?'A':'D';const L=wordOf(c[1],c[2],d);document.getElementById(d+c[0]).classList.toggle('done',L.every(([a,b])=>fill[a][b]))});save()}
 function scrollLi(li){const ol=li.parentNode;if(ol.scrollHeight<=ol.clientHeight)return;const t=li.offsetTop-ol.offsetTop;if(t<ol.scrollTop||t+li.offsetHeight>ol.scrollTop+ol.clientHeight)ol.scrollTop=t-ol.clientHeight/3}
 function select(i,j,click){if(click&&i===cr&&j===cc)dir=dir==='A'?'D':'A';cr=i;cc=j;paint();fk()}
 function set(i,j,v){if(cells[i][j].classList.contains('ok')&&v!==fill[i][j]&&v!==R[i][j])return;fill[i][j]=v;cells[i][j].querySelector('.v').textContent=v;cells[i][j].classList.remove('wrong');if(!v)cells[i][j].classList.remove('rev','ok')}
@@ -177,7 +177,7 @@ list('ca',D.across,'A');list('cd',D.down,'D');
 /* timer */
 let secs=0,paused=false;const tEl=document.getElementById('time'),pBtn=document.getElementById('pause');
 const tick=()=>{tEl.textContent=mt.textContent=Math.floor(secs/3600)?Math.floor(secs/3600)+':'+String(Math.floor(secs/60)%60).padStart(2,'0')+':'+String(secs%60).padStart(2,'0'):Math.floor(secs/60)+':'+String(secs%60).padStart(2,'0')};
-setInterval(()=>{if(!paused&&!solved&&!document.hidden){secs++;tick()}},1000);
+setInterval(()=>{if(!paused&&!solved&&!document.hidden){secs++;tick();save()}},1000);
 pBtn.onclick=()=>{paused=!paused;pBtn.classList.toggle('paused',paused);document.getElementById('main').classList.toggle('paused',paused);if(!paused)fk()};
 /* menus */
 document.querySelectorAll('.menu>button').forEach(b=>b.onclick=e=>{e.stopPropagation();const m=b.parentNode,o=m.classList.contains('open');document.querySelectorAll('.menu').forEach(x=>x.classList.remove('open'));if(!o)m.classList.add('open')});
@@ -210,5 +210,14 @@ on('mlist',()=>{closePops();document.querySelector('.clues').classList.toggle('o
 on('mpause',()=>pBtn.click());
 document.querySelectorAll('.pop').forEach(p=>p.addEventListener('click',e=>{e.stopPropagation();if(e.target.closest('[data-a]'))closePops()}));
 const syncKb=()=>{if(isM()){kbd.setAttribute('inputmode','none');kbd.setAttribute('readonly','');kbd.blur()}else{kbd.removeAttribute('inputmode');kbd.removeAttribute('readonly')}};syncKb();addEventListener('resize',syncKb);
-tick();select(0,0);
+/* save progress in this browser */
+let ready=false;const SK='creators-'+R.join('').split('').reduce((h,ch)=>(h*31+ch.charCodeAt(0))|0,7);
+function save(){if(!ready)return;try{const f=[],rv=[],ok=[];for(let i=0;i<N;i++){f.push(fill[i].map(v=>v||'.').join(''));for(let j=0;j<N;j++){if(cells[i][j].classList.contains('rev'))rv.push(i*N+j);if(cells[i][j].classList.contains('ok'))ok.push(i*N+j)}}
+ localStorage.setItem(SK,JSON.stringify({f,rv,ok,secs,solved,cr,cc,dir}))}catch(e){}}
+function restore(){try{const o=JSON.parse(localStorage.getItem(SK)||'null');if(!o||!Array.isArray(o.f))return false;
+ for(let i=0;i<N;i++)for(let j=0;j<N;j++){const v=(o.f[i]||'')[j];if(R[i][j]!=='#'&&v&&v!=='.')set(i,j,v)}
+ (o.rv||[]).forEach(k=>cells[Math.floor(k/N)][k%N].classList.add('rev'));(o.ok||[]).forEach(k=>cells[Math.floor(k/N)][k%N].classList.add('ok'));
+ secs=+o.secs||0;solved=!!o.solved;if(R[o.cr]&&R[o.cr][o.cc]&&R[o.cr][o.cc]!=='#'){cr=o.cr;cc=o.cc;dir=o.dir==='D'?'D':'A'}return true}catch(e){return false}}
+addEventListener('pagehide',save);document.addEventListener('visibilitychange',save);
+const had=restore();ready=true;tick();select(cr,cc);
 </script></body></html>
